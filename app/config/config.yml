@@ -5,6 +5,7 @@ imports:
 framework:
     #esi:             ~
     #translator:      { fallback: "%locale%" }
+    translator: ~
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -28,6 +29,7 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
 
 # Assetic Configuration
 assetic:
@@ -67,3 +69,57 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: oauth_authorize
+    user_class: Oauth\DemoBundle\Entity\User
+
+fos_oauth_server:
+    db_driver: orm       # Driver availables: orm, mongodb, or propel
+    client_class:        Oauth\DemoBundle\Entity\Client
+    access_token_class:  Oauth\DemoBundle\Entity\AccessToken
+    refresh_token_class: Oauth\DemoBundle\Entity\RefreshToken
+    auth_code_class:     Oauth\DemoBundle\Entity\AuthCode
+    service:
+        user_provider: fos_user.user_manager
+
+fos_rest:
+    body_converter:
+        enabled: true
+        validate: true
+        validation_errors_argument: validationErrors # This is the default value
+
+    body_listener:
+        decoders:
+            json: fos_rest.decoder.json
+            xml: fos_rest.decoder.xml
+    routing_loader:
+        default_format: null
+    view:
+        default_engine: twig
+        force_redirects:
+            html: true
+        formats:
+            json: true
+            xml: true
+
+        view_response_listener: 'force'
+        failed_validation: HTTP_BAD_REQUEST
+    exception:
+        codes:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404
+            'Doctrine\ORM\OptimisticLockException': HTTP_CONFLICT
+        messages:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': true
+    format_listener:
+        rules:
+            # setting fallback_format to json means that instead of considering the next rule in case of a priority mismatch, json will be used
+            - { path: '^/', host: "%api_host%", priorities: ['json', 'xml'], fallback_format: json, prefer_extension: false }
+            - { path: '^/', host: "%main_host%", priorities: ['html'], fallback_format: html }
+sensio_framework_extra:
+    view:    { annotations: false }
+    router:  { annotations: true }
+    request: { converters: true }
+
+nelmio_api_doc: ~

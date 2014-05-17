@@ -1,0 +1,77 @@
+oauth_demo:
+    resource: "@OauthDemoBundle/Controller/"
+    type:     annotation
+    prefix:   /
+    host:   "%main_host%"
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+    host:   "%main_host%"
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /profile
+    host:   "%main_host%"
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /register
+    host:   "%main_host%"
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+    host:   "%main_host%"
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /profile
+    host:   "%main_host%"
+
+fos_oauth_server_token:
+    host:   "%main_host%"
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
+
+fos_oauth_server_authorize:
+    host:   "%main_host%"
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /doc
+
+demo_demo_all:
+    pattern:  /demos
+    host:   "%api_host%"
+    defaults: { _controller: OauthDemoBundle:Demo:all, _format: ~ }
+    requirements:
+        _method: GET
+
+demo_demo_get:
+    host:   "%api_host%"
+    pattern:  /demos/{id}
+    defaults: { _controller: OauthDemoBundle:Demo:get, _format: ~ }
+    requirements:
+        _method: GET
+        id: "\d+"
+
+demo_demo_new:
+    pattern:  /demos
+    host:   "%api_host%"
+    defaults: { _controller: OauthDemoBundle:Demo:new, _format: ~ }
+    requirements:
+        _method: POST
+
+demo_demo_edit:
+    pattern:  /demos/{id}
+    host:   "%api_host%"
+    defaults: { _controller: OauthDemoBundle:Demo:edit, _format: ~ }
+    requirements:
+        _method: PUT
+
+demo_demo_delete:
+    pattern:  /demos/{id}
+    host:   "%api_host%"
+    defaults: { _controller: OauthDemoBundle:Demo:remove, _format: ~ }
+    requirements:
+        _method: DELETE
