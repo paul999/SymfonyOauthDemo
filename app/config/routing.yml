@@ -39,6 +39,7 @@ fos_oauth_server_authorize:
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /doc
+    host:     "%main_host%"
 
 demo_demo_all:
     pattern:  /demos
